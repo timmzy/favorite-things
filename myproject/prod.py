@@ -9,9 +9,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'favoritedata',
         'USER': 'awsuser',
-        'PASSWORD': 'awsuser',
+        'PASSWORD': 'awsuser.',
         'HOST': 'favoritedata.cohwafmecuz4.us-east-2.rds.amazonaws.com',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 
