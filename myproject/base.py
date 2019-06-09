@@ -24,8 +24,7 @@ SECRET_KEY = "Set key for production"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
-
+DEBUG = True
 
 # Application definition
 
