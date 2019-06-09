@@ -10,8 +10,8 @@ DATABASES = {
         'NAME': 'favoritedata',
         'USER': 'awsuser',
         'PASSWORD': 'awsuser',
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': 'favoritedata.cohwafmecuz4.us-east-2.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
