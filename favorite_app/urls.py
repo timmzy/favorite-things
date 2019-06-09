@@ -17,7 +17,7 @@ urlpatterns = [
 router = routers.SimpleRouter(trailing_slash=True)
 router.register(r'user-category', api.UserCategory)
 router.register(r'create-user', api.Signup)
-router.register(r'activities', api.Audit)
+router.register(r'activities', api.AuditView)
 router.register(r'', api.FavoriteThingViewSet)
 
 

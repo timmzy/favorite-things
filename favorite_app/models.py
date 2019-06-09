@@ -10,6 +10,12 @@ from django.contrib.admin.models import LogEntry
 # Create your models here.
 
 def validate_length(value):
+    """
+    :param value:
+    Input value
+
+    Raise error if it doesn't meet condition
+    """
     if len(value) <= 10:
         raise ValidationError(
             _('Value must be more than 10'),
@@ -17,6 +23,14 @@ def validate_length(value):
         )
 
 def ranking(obj, insert):
+    """
+    :param obj:
+    Dictionary data of current favorite things with id and rank
+    :param insert:
+    Dictionary data (id and rank) of new contending rank
+    :return:
+    Dictionary data (id and rank) of reordered ranking
+    """
     value = list(insert.values())[0]
     if value in list(obj.values()):
         first = value
@@ -46,9 +60,16 @@ class FavoriteThing(models.Model):
 
     @property
     def category_name(self):
+        """
+        :return:
+        Category title in relations with the instance object
+        """
         return self.category.title
 
     def save(self, *args, **kwargs):
+        """
+        Create an audit when data is saved and updated
+        """
         if self.id:
             audit = Audit(models_objects='FavoriteThing', title=self.title, action_flag='Updated', user=self.user)
             audit.save()
@@ -58,6 +79,9 @@ class FavoriteThing(models.Model):
         super(FavoriteThing, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        """
+        Create an audit when data is deleted
+        """
         audit = Audit(models_objects='FavoriteCategory', title=self.title, action_flag='Delete', user=self.user)
         audit.save()
         super(FavoriteThing, self).delete(*args, **kwargs)
@@ -79,6 +103,9 @@ class FavoriteCategory(models.Model):
         verbose_name_plural = "Favorite Categories"
 
     def save(self, *args, **kwargs):
+        """
+        Create an audit when data is saved and updated
+        """
         if self.id:
             audit = Audit(models_objects='FavoriteCategory', title=self.title, action_flag='Updated', user=self.user)
             audit.save()
@@ -88,6 +115,9 @@ class FavoriteCategory(models.Model):
         super(FavoriteCategory, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
+        """
+        Create an audit when data is deleted
+        """
         audit = Audit(models_objects='FavoriteCategory', title=self.title, action_flag='Delete', user=self.user)
         audit.save()
         super(FavoriteCategory, self).delete(*args, **kwargs)
@@ -105,5 +135,8 @@ class Audit(models.Model):
 
 @receiver(pre_save, sender=FavoriteThing)
 def doit(sender, instance, *args, **kwargs):
+    """
+    Signal for whenever data is saved, check for ranking conflicts and fix
+    """
     rank = {x.id:x.ranking for x in FavoriteThing.objects.filter(category=instance.category)}
     get_review = ranking(rank, {'x':instance.ranking})
