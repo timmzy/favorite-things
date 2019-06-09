@@ -2,8 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'index.html', locals())
-
+"""
+View to redirect any 404 error to homepage
+"""
 def error404(request):
     return redirect("/")
